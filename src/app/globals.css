@@ -1,0 +1,252 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ *
+ *  Campus Connect — Design System
+ *  Warm-white / ivory / cream palette. Amrita maroon + gold accents.
+ *  Inspired by Apple, Linear, Notion, Stripe. Light theme only.
+ * ------------------------------------------------------------------ */
+
+@theme {
+  /* Surfaces */
+  --color-canvas: #fbfaf7;
+  --color-canvas-2: #f6f3ee;
+  --color-surface: #ffffff;
+  --color-cream: #f5f1ea;
+  --color-ivory: #fcfbf8;
+
+  /* Ink (text) */
+  --color-ink: #211e1a;
+  --color-ink-muted: #6c665e;
+  --color-ink-subtle: #98918a;
+
+  /* Lines / borders */
+  --color-line: #ece8e1;
+  --color-line-strong: #ddd7cc;
+
+  /* Brand — Amrita vermillion red + warm gold */
+  --color-primary: #c1391f;
+  --color-primary-hover: #a32d17;
+  --color-primary-soft: #fae7e0;
+  --color-primary-foreground: #ffffff;
+  --color-gold: #c08a2d;
+  --color-gold-soft: #f8f0df;
+
+  /* Availability semantics */
+  --color-available: #1c8049;
+  --color-available-soft: #e7f4ec;
+  --color-sold: #b23a2e;
+  --color-sold-soft: #f8ebe8;
+  --color-soon: #96690f;
+  --color-soon-soft: #fbf1dd;
+
+  /* Radii */
+  --radius-xs: 0.5rem;
+  --radius-sm: 0.75rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
+  --radius-2xl: 2.25rem;
+
+  /* Typography */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
+  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+
+  /* Easing */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* ---------------------------------- Base ---------------------------------- */
+
+@layer base {
+  * {
+    border-color: var(--color-line);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--color-primary-soft);
+    color: var(--color-primary-hover);
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+  }
+
+  /* Accessible focus ring for keyboard users */
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Nicer, thin, warm scrollbar */
+  ::-webkit-scrollbar {
+    width: 11px;
+    height: 11px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #e2ddd3;
+    border: 3px solid var(--color-canvas);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #d2ccc0;
+  }
+}
+
+/* -------------------------------- Utilities ------------------------------- */
+
+@layer utilities {
+  /* Layered, ultra-subtle shadows */
+  .shadow-soft {
+    box-shadow:
+      0 1px 2px rgba(33, 30, 26, 0.04),
+      0 1px 3px rgba(33, 30, 26, 0.03);
+  }
+  .shadow-card {
+    box-shadow:
+      0 1px 2px rgba(33, 30, 26, 0.04),
+      0 8px 24px -12px rgba(33, 30, 26, 0.12);
+  }
+  .shadow-elevated {
+    box-shadow:
+      0 2px 4px rgba(33, 30, 26, 0.04),
+      0 24px 48px -20px rgba(33, 30, 26, 0.22);
+  }
+  .shadow-glow {
+    box-shadow:
+      0 10px 40px -12px rgba(193, 57, 31, 0.32);
+  }
+
+  .glass {
+    background: rgba(252, 251, 248, 0.72);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  /* Warm radial ambience used behind the hero */
+  .bg-aurora {
+    background-image:
+      radial-gradient(60% 55% at 15% 0%, rgba(193, 57, 31, 0.1) 0%, transparent 60%),
+      radial-gradient(55% 60% at 90% 5%, rgba(192, 138, 45, 0.11) 0%, transparent 55%),
+      radial-gradient(50% 50% at 50% 120%, rgba(193, 57, 31, 0.07) 0%, transparent 60%);
+  }
+
+  .bg-grid {
+    background-image:
+      linear-gradient(rgba(33, 30, 26, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(33, 30, 26, 0.025) 1px, transparent 1px);
+    background-size: 44px 44px;
+    -webkit-mask-image: radial-gradient(60% 60% at 50% 40%, #000 0%, transparent 100%);
+    mask-image: radial-gradient(60% 60% at 50% 40%, #000 0%, transparent 100%);
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* ------------------------------- Animations ------------------------------- */
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes overlay-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+@keyframes content-in {
+  from { opacity: 0; transform: translate(-50%, -46%) scale(0.97); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+@keyframes content-out {
+  from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  to { opacity: 0; transform: translate(-50%, -48%) scale(0.98); }
+}
+@keyframes pop-in {
+  from { opacity: 0; transform: scale(0.96) translateY(-4px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* No fill-mode: the resting state is always visible, so content can never
+   get stuck hidden even if the entrance animation is skipped/throttled. */
+.animate-rise { animation: rise 0.6s var(--ease-out-soft); }
+
+.animate-overlay-in { animation: overlay-in 0.2s var(--ease-out-soft); }
+.animate-overlay-out { animation: overlay-out 0.15s var(--ease-out-soft); }
+.animate-content-in { animation: content-in 0.28s var(--ease-out-soft); }
+.animate-content-out { animation: content-out 0.18s var(--ease-out-soft); }
+.animate-pop-in { animation: pop-in 0.16s var(--ease-out-soft); }
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-cream);
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.65),
+    transparent
+  );
+  animation: shimmer 1.6s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
