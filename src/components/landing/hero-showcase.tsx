@@ -8,7 +8,7 @@ import { useCanteenSummaries, useMenu } from "@/lib/hooks/queries";
 import { cn, formatPrice, timeAgo } from "@/lib/utils";
 import type { CanteenSummary } from "@/lib/types";
 
-const DWELL_MS = 2800; // time a card stays put before the next flies in
+const DWELL_MS = 1600; // time a card stays put before the next flies in
 
 /** 3D transform for a slide, given its cyclic distance from the active one. */
 function slideStyle(offset: number, count: number): React.CSSProperties {
@@ -124,10 +124,18 @@ function CanteenSlide({
       aria-hidden={!active}
       className={cn(
         "absolute inset-0 overflow-hidden rounded-[26px] border border-line bg-surface/90 shadow-elevated backdrop-blur-sm",
-        "transition-[transform,opacity] duration-[750ms] ease-out-soft [transform-style:preserve-3d] [backface-visibility:hidden] will-change-transform",
+        "transition-[transform,opacity] duration-[520ms] ease-out-soft [transform-style:preserve-3d] [backface-visibility:hidden] will-change-transform",
         !active && "pointer-events-none",
       )}
     >
+      {/* gloss sweep that fires each time the card lands in front */}
+      <span
+        aria-hidden
+        className={cn(
+          "pointer-events-none absolute inset-y-0 -left-1/3 z-20 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/25 to-transparent dark:via-white/10",
+          active ? "animate-sheen" : "opacity-0",
+        )}
+      />
       <div className="flex items-start justify-between gap-3 border-b border-line px-5 py-4">
         <div className="min-w-0">
           <p className="truncate font-display text-lg font-medium text-ink">
