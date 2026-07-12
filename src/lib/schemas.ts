@@ -57,9 +57,16 @@ export const staffSchema = z
     email: z.string().min(1, "Email is required").email("Enter a valid email"),
     role: z.enum(["staff", "admin"]),
     canteenId: z.string().nullable(),
+    // Optional here so the shared schema also covers edits. Presence is
+    // enforced on create in the dialog; length is validated whenever set.
+    password: z.string().optional(),
   })
   .refine((v) => v.role === "admin" || Boolean(v.canteenId), {
     message: "Assign a canteen for staff accounts",
     path: ["canteenId"],
+  })
+  .refine((v) => !v.password || v.password.length >= 8, {
+    message: "Password must be at least 8 characters",
+    path: ["password"],
   });
 export type StaffValues = z.infer<typeof staffSchema>;

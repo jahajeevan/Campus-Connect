@@ -134,6 +134,8 @@ export interface StaffInput {
   email: string;
   role: StaffRole;
   canteenId: string | null;
+  /** Temporary login password — required only when creating a new account. */
+  password?: string;
 }
 
 /* --------------------------- Display helpers ---------------------------- */

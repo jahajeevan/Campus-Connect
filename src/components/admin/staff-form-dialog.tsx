@@ -45,6 +45,7 @@ export function StaffFormDialog({ open, onOpenChange, canteens, staff }: Props) 
     handleSubmit,
     control,
     reset,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm<StaffValues>({
     resolver: zodResolver(staffSchema),
@@ -59,16 +60,27 @@ export function StaffFormDialog({ open, onOpenChange, canteens, staff }: Props) 
   }, [open, staff]);
 
   const onSubmit = async (values: StaffValues) => {
-    const payload = {
-      ...values,
-      canteenId: values.role === "admin" ? null : values.canteenId,
-    };
+    // Password is required to create a login, but not to edit an existing one.
+    if (!staff && !values.password) {
+      setError("password", { message: "Set a temporary password" });
+      return;
+    }
+    const canteenId = values.role === "admin" ? null : values.canteenId;
     try {
       if (staff) {
-        await updateStaff.mutateAsync({ id: staff.id, input: payload });
+        await updateStaff.mutateAsync({
+          id: staff.id,
+          input: { name: values.name, email: values.email, role: values.role, canteenId },
+        });
         toast.success(`Updated ${values.name}`);
       } else {
-        await createStaff.mutateAsync(payload);
+        await createStaff.mutateAsync({
+          name: values.name,
+          email: values.email,
+          role: values.role,
+          canteenId,
+          password: values.password,
+        });
         toast.success(`Added ${values.name}`);
       }
       onOpenChange(false);
@@ -107,6 +119,24 @@ export function StaffFormDialog({ open, onOpenChange, canteens, staff }: Props) 
               {...register("email")}
             />
           </Field>
+
+          {!isEdit && (
+            <Field
+              label="Temporary password"
+              htmlFor="s-password"
+              error={errors.password?.message}
+              hint="Share this with the staff member; they can change it after signing in."
+            >
+              <Input
+                id="s-password"
+                type="password"
+                placeholder="At least 8 characters"
+                autoComplete="new-password"
+                aria-invalid={Boolean(errors.password)}
+                {...register("password")}
+              />
+            </Field>
+          )}
 
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label="Role" htmlFor="s-role" error={errors.role?.message}>
@@ -182,5 +212,6 @@ function buildDefaults(staff: StaffUser | null | undefined): StaffValues {
     email: staff?.email ?? "",
     role: staff?.role ?? "staff",
     canteenId: staff?.canteenId ?? null,
+    password: "",
   };
 }

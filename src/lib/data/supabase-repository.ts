@@ -441,15 +441,31 @@ export class SupabaseRepository implements Repository {
   }
 
   async createStaff(input: StaffInput): Promise<StaffUser> {
-    void input;
-    // Auth users must be provisioned through Supabase Auth (a service-role
-    // operation). The staff profile row is then linked by auth user id.
-    // See README §Staff provisioning for the secure server-side flow.
-    return Promise.reject(
-      new AuthError(
-        "Creating staff accounts requires the Supabase admin flow — see README §Staff provisioning.",
-      ),
-    );
+    // Provisioning an auth user is a service-role operation, so it runs on the
+    // server. The route verifies the caller is an admin before creating the
+    // Auth user + `staff_users` row. See src/app/api/admin/staff/route.ts.
+    const res = await fetch("/api/admin/staff", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: input.name,
+        email: input.email,
+        password: input.password ?? "",
+        role: input.role,
+        canteenId: input.role === "admin" ? null : input.canteenId,
+      }),
+    });
+    const body = (await res.json().catch(() => null)) as
+      | (StaffUser & { error?: never })
+      | { error: string }
+      | null;
+    if (!res.ok || !body || "error" in body) {
+      throw new Error(
+        (body && "error" in body && body.error) ||
+          "Could not create the staff account.",
+      );
+    }
+    return body;
   }
 
   async updateStaff(
