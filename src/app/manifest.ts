@@ -11,7 +11,7 @@ export default function manifest(): MetadataRoute.Manifest {
     background_color: "#fbfaf7",
     theme_color: "#c1391f",
     icons: [
-      { src: "/icon", sizes: "512x512", type: "image/png" },
+      { src: "/amrita-logo.png", sizes: "any", type: "image/png" },
     ],
   };
 }
