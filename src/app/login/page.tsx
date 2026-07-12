@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -25,8 +25,15 @@ const DEMO_ACCOUNTS = [
 
 export default function LoginPage() {
   const router = useRouter();
-  const { signIn } = useAuth();
+  const { signIn, user, loading } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
+
+  // Already signed in? Send them straight to their workspace.
+  useEffect(() => {
+    if (!loading && user) {
+      router.replace(user.role === "admin" ? "/admin" : "/dashboard");
+    }
+  }, [loading, user, router]);
 
   const {
     register,

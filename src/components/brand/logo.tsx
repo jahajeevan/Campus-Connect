@@ -16,14 +16,21 @@ export function LogoMark({
   priority?: boolean;
 }) {
   return (
-    <Image
-      src="/amrita-logo.png"
-      alt={title}
-      width={44}
-      height={44}
-      priority={priority}
-      className={cn("h-10 w-10 object-contain", className)}
-    />
+    <span
+      className={cn(
+        "inline-grid shrink-0 place-items-center rounded-xl transition-colors dark:bg-[#f4eee3] dark:p-1 dark:shadow-soft",
+        className,
+      )}
+    >
+      <Image
+        src="/amrita-logo.png"
+        alt={title}
+        width={44}
+        height={44}
+        priority={priority}
+        className="h-full w-full object-contain"
+      />
+    </span>
   );
 }
 

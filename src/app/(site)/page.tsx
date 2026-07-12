@@ -5,7 +5,8 @@ import { ArrowRight, BellRing, MapPinned, RefreshCw, Salad } from "lucide-react"
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CanteenCard, CanteenCardSkeleton } from "@/components/canteen-card";
-import { HeroPreview } from "@/components/landing/hero-preview";
+import { HeroShowcase } from "@/components/landing/hero-showcase";
+import { Reveal } from "@/components/ui/reveal";
 import { useCanteenSummaries } from "@/lib/hooks/queries";
 import { site } from "@/lib/site";
 
@@ -76,7 +77,7 @@ export default function LandingPage() {
 
           {/* right — live product */}
           <div className="animate-rise lg:col-span-6 xl:col-span-5">
-            <HeroPreview />
+            <HeroShowcase />
           </div>
         </div>
       </section>
@@ -103,8 +104,10 @@ export default function LandingPage() {
           </div>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {canteens?.map((canteen) => (
-              <CanteenCard key={canteen.id} canteen={canteen} />
+            {canteens?.map((canteen, i) => (
+              <Reveal key={canteen.id} delay={i * 90} className="h-full">
+                <CanteenCard canteen={canteen} />
+              </Reveal>
             ))}
           </div>
         )}
@@ -124,24 +127,30 @@ export default function LandingPage() {
           </div>
 
           <div className="grid gap-8 md:grid-cols-3">
-            <Step
-              index="01"
-              icon={<Salad className="h-5 w-5" />}
-              title="Students check the menu"
-              body="Open Campus Connect from anywhere and see exactly what each canteen is serving and at what price — before making the walk."
-            />
-            <Step
-              index="02"
-              icon={<RefreshCw className="h-5 w-5" />}
-              title="Staff update in real time"
-              body="Canteen staff mark items sold out, change prices or add dishes in a couple of taps. No technical skills required."
-            />
-            <Step
-              index="03"
-              icon={<BellRing className="h-5 w-5" />}
-              title="Everyone stays in sync"
-              body="Every change appears on the public site instantly, so the menu you see is the menu on the counter."
-            />
+            <Reveal delay={0}>
+              <Step
+                index="01"
+                icon={<Salad className="h-5 w-5" />}
+                title="Students check the menu"
+                body="Open Campus Connect from anywhere and see exactly what each canteen is serving and at what price — before making the walk."
+              />
+            </Reveal>
+            <Reveal delay={120}>
+              <Step
+                index="02"
+                icon={<RefreshCw className="h-5 w-5" />}
+                title="Staff update in real time"
+                body="Canteen staff mark items sold out, change prices or add dishes in a couple of taps. No technical skills required."
+              />
+            </Reveal>
+            <Reveal delay={240}>
+              <Step
+                index="03"
+                icon={<BellRing className="h-5 w-5" />}
+                title="Everyone stays in sync"
+                body="Every change appears on the public site instantly, so the menu you see is the menu on the counter."
+              />
+            </Reveal>
           </div>
         </div>
       </section>

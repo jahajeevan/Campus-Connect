@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { ChevronDown, ExternalLink, LayoutDashboard, LogOut, Shield } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
@@ -43,6 +44,7 @@ export function AppHeader() {
         </div>
 
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           <Link
             href="/"
             className="hidden items-center gap-1.5 rounded-full px-3.5 py-2 text-sm font-medium text-ink-muted transition-colors hover:bg-cream hover:text-ink sm:inline-flex"

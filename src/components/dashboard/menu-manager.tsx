@@ -19,6 +19,7 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { Reveal } from "@/components/ui/reveal";
 import { StatTile } from "@/components/dashboard/stat-tile";
 import { AvailabilityPicker } from "@/components/dashboard/availability-picker";
 import { ItemFormDialog } from "@/components/dashboard/item-form-dialog";
@@ -195,11 +196,11 @@ export function MenuManager({ canteenId }: { canteenId: string }) {
         <EmptyState onAdd={() => setCategoryDialog({ open: true, category: null })} />
       ) : (
         <div className="space-y-5">
-          {categories.map((category) => {
+          {categories.map((category, ci) => {
             const catItems = items.filter((i) => i.categoryId === category.id);
             return (
+              <Reveal key={category.id} delay={Math.min(ci, 5) * 55}>
               <section
-                key={category.id}
                 className="overflow-hidden rounded-2xl border border-line bg-surface shadow-soft"
               >
                 <header className="flex items-center justify-between gap-3 border-b border-line bg-ivory px-5 py-3.5">
@@ -270,6 +271,7 @@ export function MenuManager({ canteenId }: { canteenId: string }) {
                   </ul>
                 )}
               </section>
+              </Reveal>
             );
           })}
         </div>

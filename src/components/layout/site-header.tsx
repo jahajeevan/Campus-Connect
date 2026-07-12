@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { LayoutDashboard, LogIn } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { useAuth } from "@/lib/auth-context";
 import { cn } from "@/lib/utils";
 
@@ -15,7 +16,7 @@ const NAV = [
 ];
 
 export function SiteHeader() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -56,7 +57,13 @@ export function SiteHeader() {
           </nav>
 
           <div className="flex items-center gap-2">
-            {user ? (
+            <ThemeToggle />
+            {loading ? (
+              <div
+                className="h-9 w-9 rounded-full border border-line bg-cream/60 sm:w-[104px]"
+                aria-hidden
+              />
+            ) : user ? (
               <Button asChild size="sm" variant="secondary">
                 <Link href={user.role === "admin" ? "/admin" : "/dashboard"}>
                   <LayoutDashboard className="h-4 w-4" />

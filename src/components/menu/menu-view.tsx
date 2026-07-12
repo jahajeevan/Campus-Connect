@@ -19,6 +19,7 @@ import {
   AvailabilityBadge,
   DietaryMark,
 } from "@/components/menu/indicators";
+import { Reveal } from "@/components/ui/reveal";
 import { useCanteenBySlug, useMenu } from "@/lib/hooks/queries";
 import { cn, formatHours, formatPrice, timeAgo } from "@/lib/utils";
 import type { Category, FoodItem } from "@/lib/types";
@@ -207,12 +208,10 @@ export function MenuView({ slug }: { slug: string }) {
           <EmptyMenu filtering={isFiltering} />
         ) : (
           <div className="space-y-10">
-            {grouped.map(({ category, items }) => (
-              <CategorySection
-                key={category.id}
-                category={category}
-                items={items}
-              />
+            {grouped.map(({ category, items }, idx) => (
+              <Reveal key={category.id} delay={Math.min(idx, 4) * 70}>
+                <CategorySection category={category} items={items} />
+              </Reveal>
             ))}
           </div>
         )}

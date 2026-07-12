@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { ArrowUpRight, Clock, MapPin, UtensilsCrossed } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { TiltCard } from "@/components/ui/tilt-card";
 import { cn, formatHours, timeAgo } from "@/lib/utils";
 import type { CanteenAccent, CanteenSummary } from "@/lib/types";
 
@@ -32,18 +32,16 @@ export function CanteenCard({ canteen }: { canteen: CanteenSummary }) {
   const accent = ACCENT[canteen.accent];
 
   return (
-    <div>
-      <Link
-        href={`/canteen/${canteen.slug}`}
-        className="group block h-full focus-visible:outline-none"
-        aria-label={`View the menu for ${canteen.name}`}
-      >
-        <motion.article
-          whileHover={{ y: -6 }}
-          transition={{ type: "spring", stiffness: 320, damping: 26 }}
+    <Link
+      href={`/canteen/${canteen.slug}`}
+      className="group block h-full focus-visible:outline-none"
+      aria-label={`View the menu for ${canteen.name}`}
+    >
+      <TiltCard>
+        <article
           className={cn(
             "relative flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-card transition-shadow duration-300",
-            "group-hover:border-line-strong group-focus-visible:ring-2 group-focus-visible:ring-primary/50",
+            "group-hover:border-line-strong group-hover:shadow-elevated group-focus-visible:ring-2 group-focus-visible:ring-primary/50",
             accent.glow,
           )}
         >
@@ -105,9 +103,9 @@ export function CanteenCard({ canteen }: { canteen: CanteenSummary }) {
               Updated {timeAgo(canteen.lastUpdated)}
             </p>
           </div>
-        </motion.article>
-      </Link>
-    </div>
+        </article>
+      </TiltCard>
+    </Link>
   );
 }
 

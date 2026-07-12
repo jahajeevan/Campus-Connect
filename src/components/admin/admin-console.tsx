@@ -24,6 +24,7 @@ import { Switch } from "@/components/ui/switch";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { Reveal } from "@/components/ui/reveal";
 import { StatTile } from "@/components/dashboard/stat-tile";
 import { ActivityFeed } from "@/components/dashboard/activity-feed";
 import { CanteenFormDialog } from "@/components/admin/canteen-form-dialog";
@@ -120,12 +121,18 @@ function OverviewTab({
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-        <StatTile tone="primary" icon={<Store className="h-5 w-5" />} label="Canteens" value={stats.totalCanteens} />
-        <StatTile tone="available" icon={<CircleCheck className="h-5 w-5" />} label="Open now" value={stats.openCanteens} />
-        <StatTile tone="gold" icon={<UtensilsCrossed className="h-5 w-5" />} label="Total items" value={stats.totalItems} />
-        <StatTile tone="available" icon={<CircleCheck className="h-5 w-5" />} label="Available" value={stats.availableItems} />
-        <StatTile tone="sold" icon={<Settings2 className="h-5 w-5" />} label="Sold out" value={stats.soldOutItems} />
-        <StatTile tone="neutral" icon={<Users className="h-5 w-5" />} label="Staff" value={stats.totalStaff} />
+        {[
+          <StatTile key="c" tone="primary" icon={<Store className="h-5 w-5" />} label="Canteens" value={stats.totalCanteens} />,
+          <StatTile key="o" tone="available" icon={<CircleCheck className="h-5 w-5" />} label="Open now" value={stats.openCanteens} />,
+          <StatTile key="t" tone="gold" icon={<UtensilsCrossed className="h-5 w-5" />} label="Total items" value={stats.totalItems} />,
+          <StatTile key="a" tone="available" icon={<CircleCheck className="h-5 w-5" />} label="Available" value={stats.availableItems} />,
+          <StatTile key="s" tone="sold" icon={<Settings2 className="h-5 w-5" />} label="Sold out" value={stats.soldOutItems} />,
+          <StatTile key="st" tone="neutral" icon={<Users className="h-5 w-5" />} label="Staff" value={stats.totalStaff} />,
+        ].map((tile, i) => (
+          <Reveal key={i} delay={i * 55}>
+            {tile}
+          </Reveal>
+        ))}
       </div>
 
       <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-soft">

@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ------------------------------------------------------------------ *
  *  Campus Connect — Design System
  *  Warm-white / ivory / cream palette. Amrita maroon + gold accents.
@@ -249,4 +251,103 @@
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* ------------------------------------------------------------------ *
+ *  Dark mode — a warm espresso, not a harsh black. Tuned so it feels
+ *  as considered as the light theme. Semantic tokens flip here and the
+ *  whole app follows, because every component uses the tokens.
+ * ------------------------------------------------------------------ */
+.dark {
+  --color-canvas: #201c17;
+  --color-canvas-2: #29241d;
+  --color-surface: #2a251e;
+  --color-cream: #332c23;
+  --color-ivory: #24201a;
+
+  --color-ink: #f3eee5;
+  --color-ink-muted: #bdb4a7;
+  --color-ink-subtle: #918879;
+
+  --color-line: #3a332b;
+  --color-line-strong: #4c443a;
+
+  --color-primary: #e65c43;
+  --color-primary-hover: #f06d54;
+  --color-primary-soft: #3b241c;
+  --color-primary-foreground: #ffffff;
+  --color-gold: #daa451;
+  --color-gold-soft: #382c19;
+
+  --color-available: #5cc086;
+  --color-available-soft: #1f3327;
+  --color-sold: #ed8974;
+  --color-sold-soft: #3c2521;
+  --color-soon: #ddac54;
+  --color-soon-soft: #372b18;
+
+  color-scheme: dark;
+}
+
+.dark body {
+  background-color: var(--color-canvas);
+}
+
+.dark ::selection {
+  background: var(--color-primary-soft);
+  color: var(--color-ink);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #3c352c;
+  border-color: var(--color-canvas);
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #4c443a;
+}
+
+/* Elevation on dark reads through lighter surfaces + soft black shadow. */
+.dark .shadow-soft {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.4),
+    0 1px 3px rgba(0, 0, 0, 0.3);
+}
+.dark .shadow-card {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.4),
+    0 10px 28px -14px rgba(0, 0, 0, 0.6);
+}
+.dark .shadow-elevated {
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.45),
+    0 28px 56px -24px rgba(0, 0, 0, 0.7);
+}
+.dark .shadow-glow {
+  box-shadow: 0 12px 44px -12px rgba(230, 92, 67, 0.4);
+}
+
+.dark .glass {
+  background: rgba(32, 28, 23, 0.72);
+}
+
+.dark .bg-aurora {
+  background-image:
+    radial-gradient(60% 55% at 15% 0%, rgba(230, 92, 67, 0.14) 0%, transparent 60%),
+    radial-gradient(55% 60% at 90% 5%, rgba(218, 164, 81, 0.12) 0%, transparent 55%),
+    radial-gradient(50% 50% at 50% 120%, rgba(230, 92, 67, 0.08) 0%, transparent 60%);
+}
+
+.dark .bg-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+}
+
+.dark .skeleton::after {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.06),
+    transparent
+  );
 }
