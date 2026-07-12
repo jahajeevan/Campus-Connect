@@ -35,7 +35,7 @@ export function AppHeader() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <div className="flex items-center gap-3">
           <Link href={isAdmin ? "/admin" : "/dashboard"} className="rounded-lg">
-            <Logo />
+            <Logo priority />
           </Link>
           <Badge tone={isAdmin ? "primary" : "gold"} size="sm" className="hidden sm:inline-flex">
             {isAdmin ? "Super Admin" : "Staff"}

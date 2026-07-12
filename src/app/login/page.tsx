@@ -70,7 +70,7 @@ export default function LoginPage() {
 
       <div className="relative w-full max-w-md">
         <div className="mb-8 flex flex-col items-center text-center">
-          <Logo subtitle />
+          <Logo subtitle priority />
           <h1 className="mt-6 text-2xl font-semibold tracking-tight text-ink">
             Staff sign in
           </h1>

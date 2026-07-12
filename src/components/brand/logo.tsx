@@ -31,14 +31,16 @@ export function Logo({
   className,
   showText = true,
   subtitle = false,
+  priority = false,
 }: {
   className?: string;
   showText?: boolean;
   subtitle?: boolean;
+  priority?: boolean;
 }) {
   return (
     <span className={cn("inline-flex items-center gap-2.5", className)}>
-      <LogoMark className="h-10 w-10" />
+      <LogoMark className="h-10 w-10" priority={priority} />
       {showText && (
         <span className="flex flex-col leading-none">
           <span className="font-display text-[1.05rem] font-semibold tracking-tight text-ink">
