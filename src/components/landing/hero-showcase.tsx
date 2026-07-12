@@ -8,11 +8,31 @@ import { useCanteenSummaries, useMenu } from "@/lib/hooks/queries";
 import { cn, formatPrice, timeAgo } from "@/lib/utils";
 import type { CanteenSummary } from "@/lib/types";
 
-const ROTATE_MS = 4200;
+const DWELL_MS = 2800; // time a card stays put before the next flies in
+
+/** 3D transform for a slide, given its cyclic distance from the active one. */
+function slideStyle(offset: number, count: number): React.CSSProperties {
+  if (offset === 0) {
+    return {
+      transform: "translateX(0) translateZ(0) rotateY(0deg) scale(1)",
+      opacity: 1,
+      zIndex: 30,
+    };
+  }
+  // Cards ahead in the cycle wait on the right; cards just shown exit left.
+  const onRight = offset <= count / 2;
+  const sign = onRight ? 1 : -1;
+  return {
+    transform: `translateX(${sign * 24}%) translateZ(-190px) rotateY(${-sign * 32}deg) scale(0.84)`,
+    opacity: 0,
+    zIndex: 10,
+  };
+}
 
 /**
- * The hero signature: all three canteens as live menu cards that cross-fade
- * automatically, so the landing quietly shows the whole campus updating.
+ * The hero signature: all three canteens as live menu cards on a 3D carousel.
+ * The active card is always fully visible at rest; if the timer is throttled
+ * it simply stops rotating (content is never hidden).
  */
 export function HeroShowcase() {
   const { data: canteens } = useCanteenSummaries();
@@ -23,10 +43,7 @@ export function HeroShowcase() {
 
   useEffect(() => {
     if (paused || count <= 1) return;
-    const id = setInterval(
-      () => setActive((i) => (i + 1) % count),
-      ROTATE_MS,
-    );
+    const id = setInterval(() => setActive((i) => (i + 1) % count), DWELL_MS);
     return () => clearInterval(id);
   }, [paused, count]);
 
@@ -41,13 +58,24 @@ export function HeroShowcase() {
       {/* stacked card behind for depth */}
       <div
         aria-hidden
-        className="absolute inset-x-6 -bottom-4 top-8 rounded-[26px] border border-line bg-surface/60 shadow-card"
+        className="absolute inset-x-6 -bottom-4 top-8 rounded-[26px] border border-line bg-surface/50 shadow-card"
       />
 
-      <div className="relative min-h-[340px] sm:min-h-[356px]">
-        {canteens.map((canteen, i) => (
-          <CanteenSlide key={canteen.id} canteen={canteen} active={i === active} />
-        ))}
+      <div
+        className="relative min-h-[340px] sm:min-h-[356px]"
+        style={{ perspective: "1500px" }}
+      >
+        {canteens.map((canteen, i) => {
+          const offset = (i - active + count) % count;
+          return (
+            <CanteenSlide
+              key={canteen.id}
+              canteen={canteen}
+              style={slideStyle(offset, count)}
+              active={offset === 0}
+            />
+          );
+        })}
       </div>
 
       {/* indicator dots */}
@@ -74,9 +102,11 @@ export function HeroShowcase() {
 
 function CanteenSlide({
   canteen,
+  style,
   active,
 }: {
   canteen: CanteenSummary;
+  style: React.CSSProperties;
   active: boolean;
 }) {
   const { data: menu } = useMenu(canteen.id);
@@ -90,13 +120,13 @@ function CanteenSlide({
 
   return (
     <div
-      className={cn(
-        "absolute inset-0 overflow-hidden rounded-[26px] border border-line bg-surface/90 shadow-elevated backdrop-blur-sm transition-all duration-500 ease-out-soft",
-        active
-          ? "z-10 translate-y-0 scale-100 opacity-100"
-          : "pointer-events-none translate-y-2 scale-[0.97] opacity-0",
-      )}
+      style={style}
       aria-hidden={!active}
+      className={cn(
+        "absolute inset-0 overflow-hidden rounded-[26px] border border-line bg-surface/90 shadow-elevated backdrop-blur-sm",
+        "transition-[transform,opacity] duration-[750ms] ease-out-soft [transform-style:preserve-3d] [backface-visibility:hidden] will-change-transform",
+        !active && "pointer-events-none",
+      )}
     >
       <div className="flex items-start justify-between gap-3 border-b border-line px-5 py-4">
         <div className="min-w-0">
@@ -141,6 +171,7 @@ function CanteenSlide({
 
       <Link
         href={`/canteen/${canteen.slug}`}
+        tabIndex={active ? 0 : -1}
         className="group flex items-center justify-between border-t border-line bg-ivory px-5 py-3 transition-colors hover:bg-cream"
       >
         <span className="flex items-center gap-1.5 text-xs text-ink-subtle">
