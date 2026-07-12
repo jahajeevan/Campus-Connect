@@ -169,58 +169,54 @@ export function ItemFormDialog({
             />
           </Field>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Dietary" htmlFor="dietary" error={errors.dietary?.message}>
-              <Controller
-                control={control}
-                name="dietary"
-                render={({ field }) => (
-                  <div className="flex flex-wrap gap-1.5">
-                    {DIETARY_ORDER.map((d) => {
-                      const active = field.value === d;
-                      return (
-                        <button
-                          key={d}
-                          type="button"
-                          onClick={() => field.onChange(d)}
-                          aria-pressed={active}
-                          className={cn(
-                            "inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-colors",
-                            active
-                              ? "border-primary/40 bg-primary-soft text-ink"
-                              : "border-line-strong bg-surface text-ink-muted hover:bg-cream",
-                          )}
-                        >
-                          <DietaryMark dietary={d} />
-                          {DIETARY_META[d].label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                )}
-              />
-            </Field>
+          <Field label="Dietary" htmlFor="dietary" error={errors.dietary?.message}>
+            <Controller
+              control={control}
+              name="dietary"
+              render={({ field }) => (
+                <div className="grid grid-cols-3 gap-2">
+                  {DIETARY_ORDER.map((d) => {
+                    const active = field.value === d;
+                    return (
+                      <button
+                        key={d}
+                        type="button"
+                        onClick={() => field.onChange(d)}
+                        aria-pressed={active}
+                        className={cn(
+                          "flex items-center justify-center gap-2 rounded-xl border px-2 py-3 text-sm font-medium transition-all duration-150",
+                          active
+                            ? "border-primary bg-primary-soft text-ink ring-4 ring-primary/10 shadow-soft"
+                            : "border-line-strong bg-surface text-ink-muted hover:bg-cream",
+                        )}
+                      >
+                        <DietaryMark dietary={d} />
+                        {DIETARY_META[d].label}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            />
+          </Field>
 
-            <Field
-              label="Availability"
-              htmlFor="availability"
-              error={errors.availability?.message}
-            >
-              <Controller
-                control={control}
-                name="availability"
-                render={({ field }) => (
-                  <div className="flex">
-                    <AvailabilityPicker
-                      value={field.value}
-                      onChange={field.onChange}
-                      size="sm"
-                    />
-                  </div>
-                )}
-              />
-            </Field>
-          </div>
+          <Field
+            label="Availability"
+            htmlFor="availability"
+            error={errors.availability?.message}
+          >
+            <Controller
+              control={control}
+              name="availability"
+              render={({ field }) => (
+                <AvailabilityPicker
+                  value={field.value}
+                  onChange={field.onChange}
+                  variant="cards"
+                />
+              )}
+            />
+          </Field>
 
           <DialogFooter className="mt-1">
             <DialogClose asChild>

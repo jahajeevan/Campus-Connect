@@ -1,21 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import {
-  ArrowRight,
-  BellRing,
-  MapPinned,
-  RefreshCw,
-  Salad,
-  Store,
-  UtensilsCrossed,
-} from "lucide-react";
+import { ArrowRight, BellRing, MapPinned, RefreshCw, Salad } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  CanteenCard,
-  CanteenCardSkeleton,
-} from "@/components/canteen-card";
+import { CanteenCard, CanteenCardSkeleton } from "@/components/canteen-card";
+import { HeroPreview } from "@/components/landing/hero-preview";
 import { useCanteenSummaries } from "@/lib/hooks/queries";
 import { site } from "@/lib/site";
 
@@ -33,33 +23,30 @@ export default function LandingPage() {
         <div className="pointer-events-none absolute inset-0 bg-aurora" />
         <div className="pointer-events-none absolute inset-0 bg-grid" />
 
-        <div className="relative mx-auto max-w-6xl px-4 pb-16 pt-20 sm:px-6 sm:pt-28">
-          <div className="mx-auto max-w-3xl text-center animate-rise">
-            <div className="flex justify-center">
-              <Badge
-                tone="primary"
-                className="gap-1.5 px-3 py-1.5 text-[0.8125rem]"
-              >
+        <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-4 pb-16 pt-16 sm:px-6 sm:pt-20 lg:grid-cols-12 lg:gap-8 lg:pb-24 lg:pt-24">
+          {/* left — thesis */}
+          <div className="animate-rise text-center lg:col-span-6 lg:text-left xl:col-span-7">
+            <div className="flex justify-center lg:justify-start">
+              <Badge tone="primary" className="gap-1.5 px-3 py-1.5 text-[0.8125rem]">
                 <MapPinned className="h-3.5 w-3.5" />
                 {site.university} · {site.campus}
               </Badge>
             </div>
 
-            <h1 className="mt-6 text-balance text-4xl font-semibold leading-[1.05] tracking-tight text-ink sm:text-6xl">
-              Know what&rsquo;s cooking
-              <br className="hidden sm:block" />{" "}
+            <h1 className="mt-6 text-balance text-4xl font-semibold leading-[1.03] tracking-tight text-ink sm:text-5xl xl:text-6xl">
+              Know what&rsquo;s cooking{" "}
               <span className="bg-gradient-to-r from-primary to-gold bg-clip-text text-transparent">
                 before you leave the hostel.
               </span>
             </h1>
 
-            <p className="mx-auto mt-5 max-w-xl text-pretty text-base leading-relaxed text-ink-muted sm:text-lg">
-              Campus Connect shows the live menu of every canteen on campus —
-              what&rsquo;s available and what it costs, updated in real time by
-              canteen staff. No more walking over to a sold-out counter.
+            <p className="mx-auto mt-5 max-w-xl text-pretty text-base leading-relaxed text-ink-muted sm:text-lg lg:mx-0">
+              The live menu of every canteen on campus — what&rsquo;s available and
+              what it costs, updated in real time by the staff serving it. No more
+              walking over to a sold-out counter.
             </p>
 
-            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row lg:justify-start">
               <Button asChild size="lg">
                 <Link href="#canteens">
                   Browse canteens
@@ -71,23 +58,25 @@ export default function LandingPage() {
               </Button>
             </div>
 
-            <dl className="mx-auto mt-12 grid max-w-lg grid-cols-3 gap-4">
-              <Stat
-                icon={<Store className="h-4 w-4" />}
-                value={canteens ? String(canteens.length) : "—"}
-                label="Canteens"
-              />
-              <Stat
-                icon={<UtensilsCrossed className="h-4 w-4" />}
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-x-7 gap-y-4 lg:justify-start">
+              <InlineStat value={canteens ? String(canteens.length) : "—"} label="canteens" />
+              <Divider />
+              <InlineStat
                 value={canteens ? String(totalAvailable) : "—"}
-                label="Items available"
+                label="dishes available"
               />
-              <Stat
-                icon={<BellRing className="h-4 w-4" />}
-                value={canteens ? `${openCount} open` : "—"}
-                label="Right now"
+              <Divider />
+              <InlineStat
+                value={canteens ? String(openCount) : "—"}
+                label="open now"
+                live={openCount > 0}
               />
-            </dl>
+            </div>
+          </div>
+
+          {/* right — live product */}
+          <div className="animate-rise lg:col-span-6 xl:col-span-5">
+            <HeroPreview />
           </div>
         </div>
       </section>
@@ -160,24 +149,35 @@ export default function LandingPage() {
   );
 }
 
-function Stat({
-  icon,
+function InlineStat({
   value,
   label,
+  live = false,
 }: {
-  icon: React.ReactNode;
   value: string;
   label: string;
+  live?: boolean;
 }) {
   return (
-    <div className="rounded-2xl border border-line bg-surface/70 px-3 py-4 text-center shadow-soft backdrop-blur-sm">
-      <dt className="mx-auto mb-2 grid h-8 w-8 place-items-center rounded-lg bg-cream text-primary">
-        {icon}
-      </dt>
-      <dd className="text-xl font-semibold text-ink">{value}</dd>
-      <dd className="text-xs text-ink-subtle">{label}</dd>
+    <div className="flex items-baseline gap-2">
+      <span className="font-display text-3xl font-semibold tracking-tight text-ink">
+        {value}
+      </span>
+      <span className="flex items-center gap-1.5 text-sm text-ink-muted">
+        {live && (
+          <span className="relative flex h-1.5 w-1.5">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-available opacity-60" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-available" />
+          </span>
+        )}
+        {label}
+      </span>
     </div>
   );
+}
+
+function Divider() {
+  return <span className="hidden h-8 w-px bg-line-strong sm:block" aria-hidden />;
 }
 
 function Step({

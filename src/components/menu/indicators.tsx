@@ -17,15 +17,17 @@ const ICONS: Record<Availability, React.ElementType> = {
 export function AvailabilityBadge({
   availability,
   className,
+  size = "md",
 }: {
   availability: Availability;
   className?: string;
+  size?: "sm" | "md";
 }) {
   const meta = AVAILABILITY_META[availability];
   const Icon = ICONS[availability];
   return (
-    <Badge tone={meta.tone} className={cn("gap-1", className)}>
-      <Icon className="h-3.5 w-3.5" aria-hidden />
+    <Badge tone={meta.tone} size={size} className={cn("gap-1", className)}>
+      <Icon className={size === "sm" ? "h-3 w-3" : "h-3.5 w-3.5"} aria-hidden />
       {meta.label}
     </Badge>
   );
